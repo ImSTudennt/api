@@ -26,7 +26,7 @@ class Vk_photo:
 
     def get_photos(self, count = 5, name_album = None):
         album_id = "profile"
-        if self.get_album_id(name_album) != None:
+        if self.get_album_id(name_album) is not None:
             album_id = self.get_album_id(name_album)
         get_photo_url = self.host + 'photos.get'
         params = {
@@ -45,24 +45,19 @@ class Vk_photo:
     def get_dic_max_size_photos(self,lis):
         photos_dic = {}
         for el in lis:
-            flag = True
             for photo in el["sizes"]:
                 if photo["type"] == "w":
                     if el["likes"]["count"] not in photos_dic:
                         photos_dic[el["likes"]["count"]] = [photo["url"], photo["type"]]
-                        flag = False
                         break
                     else:
                         photos_dic[el["date"]] = [photo["url"], photo["type"]]
-                        flag = False
                         break
-            if flag:
-                for num,photo in enumerate(el["sizes"]):
-                    if num == (len(el["sizes"]) - 1):
-                        if el["likes"]["count"] not in photos_dic:
-                            photos_dic[el["likes"]["count"]] = [photo["url"], photo["type"]]
-                        else:
-                            photos_dic[el["date"]] = [photo["url"], photo["type"]]
+            else:
+                if el["likes"]["count"] not in photos_dic:
+                    photos_dic[el["likes"]["count"]] = [el["sizes"][-1]["url"], el["sizes"][-1]["type"]]
+                else:
+                    photos_dic[el["date"]] = [el["sizes"][-1]["url"], el["sizes"][-1]["type"]]
         return photos_dic
 
     def get_json_file(self, photos_dic):

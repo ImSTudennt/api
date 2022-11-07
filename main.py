@@ -10,6 +10,7 @@ if __name__ == '__main__':
     name_album = input("Если хотите сохранить фотографии конкретного альбома напишите название альбома, если нет введите цифру 1: ")
     id_al = vk_client.get_album_id(name_album)
     if name_album == "1":
+        ya_client.create_a_folder("photos")
         photos_dic = vk_client.get_dic_max_size_photos(vk_client.get_photos())
         vk_client.get_json_file(photos_dic)
         ya_client.put_upload(f"/photos/{id_cl}.json", "new.json")
@@ -17,6 +18,7 @@ if __name__ == '__main__':
     elif id_al == None:
         print("Название альбома введено не корректно") 
     else:
+        ya_client.create_a_folder("photos")
         photos_dic = vk_client.get_dic_max_size_photos(vk_client.get_photos(name_album=name_album))
         vk_client.get_json_file(photos_dic)
         ya_client.put_upload(f"/photos/{id_cl}.json", "new.json")
